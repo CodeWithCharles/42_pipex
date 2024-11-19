@@ -1,3 +1,3 @@
-[submodule "42_libft"]
-	path = 42_libft
-	url = git@github.com:CodeWithCharles/42_libft.git
+[submodule "libft_full"]
+	path = libft_full
+	url = git@github.com:CodeWithCharles/42_libft_full
