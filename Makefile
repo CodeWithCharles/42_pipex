@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/11/25 16:00:43 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/11/25 16:03:24 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -124,7 +124,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 # Third party compilation
 
 $(LIBFT_TARGET):
-	@if [ -ne $(LIBFT_PATH)/.git ]; then \
+	@if [ ! -d "$(LIBFT_PATH)/.git" ]; then \
 		printf "$(TERM_YELLOW)Cloning third party library \"%s\" in \"%s\"...\n$(TERM_RESET)" $(LIBFT_GIT) $(LIBFT_PATH);\
 		git clone $(LIBFT_GIT) $(LIBFT_PATH);\
 	fi
