@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/11/25 13:55:30 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/11/25 16:00:43 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ LIBFT_DIR		:=	42_libft_full
 LIBFT_PATH		:=	$(THIRD_PARTY_LIB)/$(LIBFT_DIR)
 LIBFT_INC_H		:=	libft.h
 LIBFT_TARGET	:=	libftfull.a
+LIBFT_GIT		:=	https://github.com/CodeWithCharles/42_libft_full.git
 
 TARGET			:=	pipex
 
@@ -123,6 +124,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 # Third party compilation
 
 $(LIBFT_TARGET):
+	@if [ -ne $(LIBFT_PATH)/.git ]; then \
+		printf "$(TERM_YELLOW)Cloning third party library \"%s\" in \"%s\"...\n$(TERM_RESET)" $(LIBFT_GIT) $(LIBFT_PATH);\
+		git clone $(LIBFT_GIT) $(LIBFT_PATH);\
+	fi
 	@printf "$(TERM_MAGENTA)Making archive $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
 	@$(MAKE) -C $(LIBFT_PATH)
 	@mv $(LIBFT_PATH)/$(LIBFT_INC_H) $(INC_DIR)
