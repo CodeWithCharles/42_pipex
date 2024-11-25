@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/11/19 16:14:13 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/11/25 13:55:30 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,10 @@ INC_DIR			:=	include
 OBJ_DIR			:=	build
 
 THIRD_PARTY_LIB	:=	third_party
-LIBFT_PATH		:=	libft_full
+LIBFT_DIR		:=	42_libft_full
+LIBFT_PATH		:=	$(THIRD_PARTY_LIB)/$(LIBFT_DIR)
 LIBFT_INC_H		:=	libft.h
+LIBFT_TARGET	:=	libftfull.a
 
 TARGET			:=	pipex
 
@@ -56,3 +58,73 @@ TERM_CLEAR_LINE	:=	\033[2K\r
 
 # Phony rules
 
+.PHONY: all clean fclean re norminette _header _obj_footer _obj_header tests cleanlibs fcleanlibs
+
+all: $(TARGET)
+
+clean:
+	@if [ -e $(OBJ_DIR) ]; then \
+		printf "$(TERM_YELLOW)Removing %d objects from \"%s\" folder...\n$(TERM_RESET)" $(words $(OBJS)) $(OBJ_DIR);\
+		$(RM) -r $(OBJ_DIR);\
+	fi
+
+fclean: clean
+	@if [ -e $(TARGET) ]; then \
+		printf "$(TERM_YELLOW)Removing \"%s\"...\n$(TERM_RESET)" $(TARGET);\
+		$(RM) $(TARGET);\
+		$(RM) libft.h;\
+	fi
+	@if [ -e $(TEST_TARGET) ]; then \
+		printf "$(TERM_YELLOW)Removing \"%s\"...\n$(TERM_RESET)" $(TEST_TARGET); \
+		$(RM) $(TEST_TARGET);\
+	fi
+
+cleanlibs:
+	@$(MAKE) clean -C $(LIBFT_PATH)
+
+fcleanlibs:
+	@$(MAKE) fclean -C $(LIBFT_PATH)
+	@$(RM) $(LIBFT_TARGET)
+	@$(RM) $(INC_DIR)/$(LIBFT_INC_H)
+
+re: fclean all
+
+norminette:
+	@norminette $(SRC_DIR) $(INC_DIR) | grep -Ev '^Notice|OK!$$'	\
+	&& $(ECHO) -e '\033[1;31mNorminette KO!'						\
+	|| $(ECHO) -e '\033[1;32mNorminette OK!'
+
+_header:
+	@printf "$(TERM_GREEN)Welcome to $(TERM_BLUE) \"%s\"$(TERM_GREEN) builder !\n$(TERM_RESET)" $(TARGET)
+
+_obj_header:
+	@printf "$(TERM_MAGENTA)Building objects into \"%s\" folder...\n$(TERM_RESET)" $(OBJ_DIR)
+
+_obj_footer:
+	@printf "$(TERM_UP)$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building $(TERM_BLUE)%d$(TERM_GREEN) object(s) !\n$(TERM_RESET)" $(words $(OBJS))
+
+tests: all
+	@printf "$(TERM_UP)$(TERM_GREEN)Building test file into \"%s\".\n$(TERM_RESET)" $(TEST_FILE)
+	@sh -c "$(CC) $(OBJS) $(CFLAGS) $(NAME) $(TEST_FILE) -o $(TEST_TARGET) && ./$(TEST_TARGET)"
+
+# Binary / Lib generation
+
+$(TARGET): $(LIBFT_TARGET) _header _obj_header $(OBJS) _obj_footer
+	@printf "$(TERM_MAGENTA)Making executable $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
+	@ar -rcs $@ $(OBJS)
+	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@printf "$(TERM_CLEAR_LINE)$(TERM_MAGENTA)Compiling $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...\n$(TERM_RESET)" $@
+	@mkdir -p $(@D)
+	@$(CC) -c $< -o $@ -I$(INC_DIR) $(CFLAGS)
+	@printf "$(TERM_UP)"
+
+# Third party compilation
+
+$(LIBFT_TARGET):
+	@printf "$(TERM_MAGENTA)Making archive $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
+	@$(MAKE) -C $(LIBFT_PATH)
+	@mv $(LIBFT_PATH)/$(LIBFT_INC_H) $(INC_DIR)
+	@mv $(LIBFT_PATH)/$(LIBFT_TARGET) ./ 
+	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building archive $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
