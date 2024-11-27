@@ -6,12 +6,12 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:45:23 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/27 17:40:44 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/27 18:44:50 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
-#include "../include/pipex_utils.h"
+#include "libft.h"
+#include "pipex_utils.h"
 
 char	**get_paths(char	**envp)
 {
