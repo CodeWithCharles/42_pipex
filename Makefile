@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/11/28 15:39:06 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/11/28 16:31:42 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,7 @@ TERM_CLEAR_LINE	:=	\033[2K\r
 
 # Phony rules
 
-.PHONY: all clean fclean re norminette _header _obj_footer _obj_header cleanlibs fcleanlibs tests
+.PHONY: all clean fclean re norminette _header _obj_footer _obj_header cleanlibs fcleanlibs tests _obj_test_footer
 
 all: $(TARGET)
 
@@ -122,6 +122,9 @@ _obj_header:
 _obj_footer:
 	@printf "$(TERM_UP)$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building $(TERM_BLUE)%d$(TERM_GREEN) object(s) !\n$(TERM_RESET)" $(words $(OBJS))
 
+_obj_test_footer:
+	@printf "$(TERM_UP)$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building $(TERM_BLUE)%d$(TERM_GREEN) object(s) !\n$(TERM_RESET)" $(words $(TEST_OBJS))
+
 # Binary / Lib generation
 
 $(TARGET): $(LIBFT_TARGET) _header _obj_header $(OBJS) _obj_footer 
@@ -129,7 +132,7 @@ $(TARGET): $(LIBFT_TARGET) _header _obj_header $(OBJS) _obj_footer
 	@$(CC) $(OBJS) -I$(INC_DIR) $(LIBFT_TARGET) -o $@ $(CFLAGS)
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
 
-$(TEST_TARGET): $(LIBFT_TARGET) _header _obj_header $(CORE_OBJS) $(TEST_OBJS) _obj_footer
+$(TEST_TARGET): $(LIBFT_TARGET) _header _obj_header $(CORE_OBJS) _obj_footer $(TEST_OBJS) _obj_test_footer
 	@printf "$(TERM_YELLOW)Making executable $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
 	@$(CC) $(CORE_OBJS) $(TEST_OBJS) $(LIBFT_TARGET) -I$(INC_DIR) -I$(TEST_INC) -o $@ $(CFLAGS)
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@

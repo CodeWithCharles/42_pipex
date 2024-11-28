@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:51:48 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/27 18:53:41 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:51:02 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,12 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	pipex;
 	int		ret_code;
 
-	(void)argc;
-	ret_code = RET_OK;
-	g_pname = argv[0] + 2;
+	g_pname = argv[0];
 	pipex.envp = envp;
+	pipex.null_fd = open("/dev/null", O_RDWR, 0666);
+	if (pipex.null_fd < 0)
+		return (EXIT_FAILURE);
+	if (parse_input(argc, argv, &pipex) != RET_OK)
+		return (EXIT_FAILURE);
 	pipex.paths = get_paths(envp);
-	if (!pipex.paths)
-		return (free_pipex(&pipex), print_gen_error(ERROR_PATH), RET_ERR);
-	pipex.argv = argv;
-	free_double_tab(&(pipex.paths));
-	free_pipex(&pipex);
-	return (RET_OK);
 }

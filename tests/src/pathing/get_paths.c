@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:16:24 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/28 15:37:33 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:14:19 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ int	test_get_paths(char	**envp)
 		while (good[i] != NULL)
 			i++;
 	p_test += print_test_result((i > 0 && good), "get_paths good input", NULL);
+	free_double_tab(&good);
 	return (p_test);
 }

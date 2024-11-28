@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:29:31 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/27 18:37:15 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:47:57 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ extern char	*g_pname;
 typedef struct s_pipex
 {
 	int		fd_infile;
+	int		flags_infile;
 	int		fd_outfile;
 	int		fd_null;
 	int		cmd_count;
@@ -85,6 +86,7 @@ typedef struct s_pipex
 	char	**envp;
 	char	**paths;
 	char	**argv;
+	char	**commands;
 }	t_pipex;
 
 // Functions
