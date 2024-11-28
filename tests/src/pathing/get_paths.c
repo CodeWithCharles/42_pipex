@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   get_paths.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/27 18:08:39 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/28 14:53:26 by cpoulain         ###   ########.fr       */
+/*   Created: 2024/11/28 15:16:24 by cpoulain          #+#    #+#             */
+/*   Updated: 2024/11/28 15:37:33 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_utils.h"
+#include "pipex_tester.h"
 
-void	cmd_not_found(t_pipex pipex, char *cmd)
+int	test_get_paths(char	**envp)
 {
-	(void)pipex;
-	(void)cmd;
-}
+	char	**good;
+	int		i;
+	int		p_test;
 
-void	print_gen_error(const char *error)
-{
-	fd_printf(STDERROR, error, TERM_RED, g_pname, TERM_RESET);
+	print_test_header("get_paths");
+	p_test = 0;
+	i = 0;
+	good = get_paths(envp);
+	if (good != NULL)
+		while (good[i] != NULL)
+			i++;
+	p_test += print_test_result((i > 0 && good), "get_paths good input", NULL);
+	return (p_test);
 }

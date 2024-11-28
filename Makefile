@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/11/28 13:00:39 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/11/28 15:39:06 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRC_DIR			:=	src
 INC_DIR			:=	include
 OBJ_DIR			:=	build
 TEST_DIR		:=	tests
-TEST_INC_DIR	:=	tests/include
+TEST_INC		:=	tests/include
 
 # Third party
 
@@ -40,7 +40,7 @@ LIBFT_GIT		:=	https://github.com/CodeWithCharles/42_libft_full.git
 # Targets
 
 TARGET			:=	pipex
-TEST_TARGET		:=	tester
+TEST_TARGET		:=	pipex_tester
 
 # Compiler
 
@@ -49,16 +49,13 @@ CFLAGS			:=	-Wall -Wextra -Werror
 
 # Files definition
 
-MAIN_FILE		:=	$(SRC_DIR)/pipex
+MAIN_FILE		:=	pipex
 CORE_FILES		:=	$(filter-out $(MAIN_FILE), $(FILES))
 
 # Objs formatter
 
-CORE_SRCS		=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(CORE_FILES)))
 CORE_OBJS		=	$(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(CORE_FILES)))
-TEST_SRCS		=	$(addprefix $(TEST_DIR)/$(SRC_DIR)/, $(addsuffix .c, $(TEST_FILES)))
 TEST_OBJS		=	$(addprefix $(OBJ_DIR)/$(TEST_DIR)/, $(addsuffix .o, $(TEST_FILES)))
-SRCS			=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(FILES)))
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(FILES)))
 
 # Terminal colors
@@ -78,7 +75,7 @@ TERM_CLEAR_LINE	:=	\033[2K\r
 
 # Phony rules
 
-.PHONY: all clean fclean re norminette _header _obj_footer _obj_header tests cleanlibs fcleanlibs tests
+.PHONY: all clean fclean re norminette _header _obj_footer _obj_header cleanlibs fcleanlibs tests
 
 all: $(TARGET)
 
@@ -125,20 +122,16 @@ _obj_header:
 _obj_footer:
 	@printf "$(TERM_UP)$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building $(TERM_BLUE)%d$(TERM_GREEN) object(s) !\n$(TERM_RESET)" $(words $(OBJS))
 
-tests: all
-	@printf "$(TERM_UP)$(TERM_GREEN)Building test file into \"%s\".\n$(TERM_RESET)" $(TEST_FILE)
-	@sh -c "$(CC) $(OBJS) $(CFLAGS) $(NAME) $(TEST_FILE) -o $(TEST_TARGET) && ./$(TEST_TARGET)"
-
 # Binary / Lib generation
 
-$(TARGET): $(LIBFT_TARGET) _header _obj_header $(OBJS) _obj_footer
+$(TARGET): $(LIBFT_TARGET) _header _obj_header $(OBJS) _obj_footer 
 	@printf "$(TERM_MAGENTA)Making executable $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
 	@$(CC) $(OBJS) -I$(INC_DIR) $(LIBFT_TARGET) -o $@ $(CFLAGS)
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
 
 $(TEST_TARGET): $(LIBFT_TARGET) _header _obj_header $(CORE_OBJS) $(TEST_OBJS) _obj_footer
 	@printf "$(TERM_YELLOW)Making executable $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
-	@$(CC) $(CORE_OBJS) $(TEST_OBJS) -I$(INC_DIR) -I$(TEST_INC_DIR) $(LIBFT_TARGET) -o $@ $(CFLAGS)
+	@$(CC) $(CORE_OBJS) $(TEST_OBJS) $(LIBFT_TARGET) -I$(INC_DIR) -I$(TEST_INC) -o $@ $(CFLAGS)
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -147,10 +140,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) -c $< -o $@ -I$(INC_DIR) $(CFLAGS)
 	@printf "$(TERM_UP)"
 
-$(OBJ_DIR)/$(TEST_DIR)/%.o: $(TEST_DIR)/%.c
+$(OBJ_DIR)/$(TEST_DIR)/%.o: $(TEST_DIR)/$(SRC_DIR)/%.c
 	@printf "$(TERM_CLEAR_LINE)$(TERM_YELLOW)Compiling $(TERM_BLUE)\"%s\"$(TERM_YELLOW)...\n$(TERM_RESET)" $@
 	@mkdir -p $(@D)
-	@$(CC) -c $< -o $@ -I$(INC_DIR) $(CFLAGS)
+	@$(CC) -c $< -o $@ -I$(TEST_INC) -I$(INC_DIR) $(CFLAGS)
 	@printf "$(TERM_UP)"
 
 # Third party compilation

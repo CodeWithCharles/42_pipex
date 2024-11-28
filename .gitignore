@@ -3,3 +3,4 @@ pipex
 include/libft.h
 build/
 third_party/42_libft_full/build/
+pipex_tester
