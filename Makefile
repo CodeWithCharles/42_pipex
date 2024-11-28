@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/11/27 18:29:10 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/11/28 13:00:39 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,20 @@
 RM				=	/usr/bin/rm -f
 ECHO			=	/usr/bin/echo
 
-# Constants
+# Includes
+
+include			Files.mk
+include			Files_Test.mk
+
+# Directories
 
 SRC_DIR			:=	src
 INC_DIR			:=	include
 OBJ_DIR			:=	build
+TEST_DIR		:=	tests
+TEST_INC_DIR	:=	tests/include
+
+# Third party
 
 THIRD_PARTY_LIB	:=	third_party
 LIBFT_DIR		:=	42_libft_full
@@ -28,18 +37,28 @@ LIBFT_INC_H		:=	libft.h
 LIBFT_TARGET	:=	libftfull.a
 LIBFT_GIT		:=	https://github.com/CodeWithCharles/42_libft_full.git
 
+# Targets
+
 TARGET			:=	pipex
+TEST_TARGET		:=	tester
+
+# Compiler
 
 CC				:=	cc
 CFLAGS			:=	-Wall -Wextra -Werror
 
-TEST_FILE		:=	test.c
-TEST_TARGET		:=	ft_test
+# Files definition
 
-include			Files.mk
+MAIN_FILE		:=	$(SRC_DIR)/pipex
+CORE_FILES		:=	$(filter-out $(MAIN_FILE), $(FILES))
 
 # Objs formatter
 
+CORE_SRCS		=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(CORE_FILES)))
+CORE_OBJS		=	$(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(CORE_FILES)))
+TEST_SRCS		=	$(addprefix $(TEST_DIR)/$(SRC_DIR)/, $(addsuffix .c, $(TEST_FILES)))
+TEST_OBJS		=	$(addprefix $(OBJ_DIR)/$(TEST_DIR)/, $(addsuffix .o, $(TEST_FILES)))
+SRCS			=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(FILES)))
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(FILES)))
 
 # Terminal colors
@@ -59,7 +78,7 @@ TERM_CLEAR_LINE	:=	\033[2K\r
 
 # Phony rules
 
-.PHONY: all clean fclean re norminette _header _obj_footer _obj_header tests cleanlibs fcleanlibs
+.PHONY: all clean fclean re norminette _header _obj_footer _obj_header tests cleanlibs fcleanlibs tests
 
 all: $(TARGET)
 
@@ -82,6 +101,8 @@ fclean: clean
 
 cleanlibs:
 	@$(MAKE) clean -C $(LIBFT_PATH)
+
+tests: $(TEST_TARGET)
 
 fcleanlibs:
 	@$(MAKE) fclean -C $(LIBFT_PATH)
@@ -115,8 +136,19 @@ $(TARGET): $(LIBFT_TARGET) _header _obj_header $(OBJS) _obj_footer
 	@$(CC) $(OBJS) -I$(INC_DIR) $(LIBFT_TARGET) -o $@ $(CFLAGS)
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
 
+$(TEST_TARGET): $(LIBFT_TARGET) _header _obj_header $(CORE_OBJS) $(TEST_OBJS) _obj_footer
+	@printf "$(TERM_YELLOW)Making executable $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
+	@$(CC) $(CORE_OBJS) $(TEST_OBJS) -I$(INC_DIR) -I$(TEST_INC_DIR) $(LIBFT_TARGET) -o $@ $(CFLAGS)
+	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
+
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@printf "$(TERM_CLEAR_LINE)$(TERM_MAGENTA)Compiling $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...\n$(TERM_RESET)" $@
+	@mkdir -p $(@D)
+	@$(CC) -c $< -o $@ -I$(INC_DIR) $(CFLAGS)
+	@printf "$(TERM_UP)"
+
+$(OBJ_DIR)/$(TEST_DIR)/%.o: $(TEST_DIR)/%.c
+	@printf "$(TERM_CLEAR_LINE)$(TERM_YELLOW)Compiling $(TERM_BLUE)\"%s\"$(TERM_YELLOW)...\n$(TERM_RESET)" $@
 	@mkdir -p $(@D)
 	@$(CC) -c $< -o $@ -I$(INC_DIR) $(CFLAGS)
 	@printf "$(TERM_UP)"
