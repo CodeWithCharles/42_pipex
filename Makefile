@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/11/29 17:21:50 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/11/29 18:27:23 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -131,12 +131,12 @@ _obj_test_footer:
 
 # Binary / Lib generation
 
-$(TARGET): $(LIBFT_TARGET) _header _obj_header $(OBJS) _obj_footer 
+$(TARGET): $(LIBFT_INC_H) _header _obj_header $(OBJS) _obj_footer 
 	@printf "$(TERM_MAGENTA)Making executable $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
 	@$(CC) $(OBJS) -I$(INC_DIR) $(LIBFT_TARGET) -o $@ $(CFLAGS)
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
 
-$(TEST_TARGET): $(LIBFT_TARGET) _header _obj_header $(CORE_OBJS) _obj_footer $(TEST_OBJS) _obj_test_footer
+$(TEST_TARGET): $(LIBFT_INC_H) _header _obj_header $(CORE_OBJS) _obj_footer $(TEST_OBJS) _obj_test_footer
 	@printf "$(TERM_YELLOW)Making executable $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
 	@$(CC) $(CORE_OBJS) $(TEST_OBJS) $(LIBFT_TARGET) -I$(INC_DIR) -I$(TEST_INC) -o $@ $(CFLAGS)
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
@@ -155,6 +155,14 @@ $(OBJ_DIR)/$(TEST_DIR)/%.o: $(TEST_DIR)/$(SRC_DIR)/%.c
 
 # Third party compilation
 
+$(LIBFT_INC_H): $(LIBFT_TARGET)
+	@cmp -s $(LIBFT_PATH)/$@ $(INC_DIR)/$@; \
+	DIFF=$$?; \
+	if [ $$DIFF -ne 0 ]; then \
+		printf "$(TERM_MAGENTA)Copying .h file from \"%s\" in \"%s\"...\n$(TERM_RESET)" $(LIBFT_PATH)/$@ $(INC_DIR); \
+		cp $(LIBFT_PATH)/$@ $(INC_DIR); \
+	fi	
+
 $(LIBFT_TARGET):
 	@if [ ! -d "$(LIBFT_PATH)/.git" ]; then \
 		printf "$(TERM_YELLOW)Cloning third party library \"%s\" in \"%s\"...\n$(TERM_RESET)" $(LIBFT_GIT) $(LIBFT_PATH);\
@@ -162,6 +170,5 @@ $(LIBFT_TARGET):
 	fi
 	@printf "$(TERM_MAGENTA)Making archive $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
 	@$(MAKE) -C $(LIBFT_PATH)
-	@mv $(LIBFT_PATH)/$(LIBFT_INC_H) $(INC_DIR)
 	@mv $(LIBFT_PATH)/$(LIBFT_TARGET) ./ 
-	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building archive $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
+	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done copying archive $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
