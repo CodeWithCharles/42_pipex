@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/11/28 16:31:42 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/11/29 17:21:50 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ TEST_TARGET		:=	pipex_tester
 # Compiler
 
 CC				:=	cc
-CFLAGS			:=	-Wall -Wextra -Werror
+CFLAGS			:=	-Wall -Wextra -Werror -g
 
 # Files definition
 
@@ -94,6 +94,10 @@ fclean: clean
 	@if [ -e $(TEST_TARGET) ]; then \
 		printf "$(TERM_YELLOW)Removing \"%s\"...\n$(TERM_RESET)" $(TEST_TARGET); \
 		$(RM) $(TEST_TARGET);\
+	fi
+	@if [ -e $(INC_DIR)/$(LIBFT_INC_H) ]; then \
+		printf "$(TERM_YELLOW)Removing \"%s\"...\n$(TERM_RESET)" $(INC_DIR)/$(LIBFT_INC_H); \
+		$(RM) $(INC_DIR)/$(LIBFT_INC_H);\
 	fi
 
 cleanlibs:

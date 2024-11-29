@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:51:48 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/29 16:45:49 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:05:51 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 
 char	*g_pname;
-char	*g_envp;
+char	**g_envp;
 
 int	main(int argc, char **argv, char **envp)
 {

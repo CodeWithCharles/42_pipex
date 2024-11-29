@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:29:31 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/29 16:47:42 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:04:04 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 // Error messages
 
 # define ERROR_MISSING_OPERAND		"%s%s:\tMissing operand.\n%s"
+# define ERROR_MISSING_ARGS			"%s%s:\tNot enough arguments.\n%s"
 # define ERROR_INT					"%s%s:\tInternal error.\n%s"
 # define ERROR_PATH					"%s%s:\tCould not find path in envp.\n%s"
 # define ERROR_HERE_DOC_INT			"%s%s:\tInternal error reading here_doc\n%s"
@@ -102,5 +103,9 @@ void	free_pipex(t_pipex *pipex);
 
 char	**get_paths(void);
 char	*get_absolute_path(char *command, char **paths);
+
+// Parsing functions 
+
+int		parse_input(int argc, char **argv, t_pipex *pipex);	
 
 #endif

@@ -6,14 +6,14 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:11:25 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/29 16:50:18 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:06:02 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_tester.h"
 
 char	*g_pname;
-char	*g_envp;
+char	**g_envp;
 
 int	main(int argc, char **argv, char **envp)
 {
