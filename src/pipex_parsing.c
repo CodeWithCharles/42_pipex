@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:18:47 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/29 17:32:13 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 19:08:54 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,42 @@ int	parse_input(
 )
 {
 	int	here_doc;
+	int	out_flags;
 
-	here_doc = 1;
 	if (argc < 2)
 		return (print_gen_error(ERROR_MISSING_ARGS), RET_ERR);
 	here_doc = ft_strcmp(argv[1], HERE_DOC) == 0;
-	pipex->cmd_count = argc - (3 + here_doc);
-	if (argc - (3 + here_doc) < 0)
+	pipex->cmd_count = argc - (3 + here_doc * 2);
+	if (argc - (3 + here_doc * 2) < 0)
 		return (print_gen_error(ERROR_MISSING_ARGS), RET_ERR);
-	return (RET_OK);
+	out_flags = O_WRONLY | O_CREATE | O_TRUNC;
+	if (here_doc)
+	{
+		if (read_here_doc(argv[2], pipex) != RET_OK)
+			return (RET_ERR);
+		out_flags = (out_flags & ~O_TRUNC) | O_APPEND;
+	}
+	else
+		pipex->fd_infile = open(argv[1], O_RDONLY);
+	if (pipex->fd_infile < 0)
+		return (print_no_such_file_error(argv[1]), RET_ERR);
+	pipex->fd_outfile = open (argv[argc - 1], out_flags, 0666);
+	if (pipex->fd_outfile < 0)
+		return (print_gen_error(ERROR_INT), RET_ERR);
+	return (parse_commands(argv + 2 + here_doc * 2, pipex));
+}
+
+int	parse_commands(
+	char **argv,
+	t_pipex *pipex
+)
+{
+	int	curr_cmd;
+
+	curr_cmd = 0;
+	pipex->commands = malloc(sizeof(t_command) * cmd_count + 1);
+	if (!pipex->commands)
+		return (free_pipex(pipex), print_gen_error(ERROR_INT), RET_ERR);
+	while (curr_cmd < cmd_count)
+		pipex->commands[curr_cmd] = ft_split(argv[curr_cmd]);
 }
