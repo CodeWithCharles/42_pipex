@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tester.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:11:25 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/28 16:33:27 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:50:18 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_tester.h"
 
-char	*g_pname = NULL;
+char	*g_pname;
+char	*g_envp;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -20,8 +21,9 @@ int	main(int argc, char **argv, char **envp)
 
 	p_test = 0;
 	(void)argc;
-	g_pname = argv[0] + 2;
-	p_test += test_get_paths(envp);
+	g_pname = argv[0];
+	g_envp = envp;
+	p_test += test_get_paths();
 	p_test += test_get_absolute_path();
 	print_test_footer(p_test);
 	return (0);

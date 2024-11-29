@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:29:31 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/28 16:47:57 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:47:42 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 # define ERROR_INT					"%s%s:\tInternal error.\n%s"
 # define ERROR_PATH					"%s%s:\tCould not find path in envp.\n%s"
 # define ERROR_HERE_DOC_INT			"%s%s:\tInternal error reading here_doc\n%s"
-# define ERROR_COMMAND_NOT_FOUND	"%s%s:\tcommand not found: %s.\n%s"
+# define ERROR_CMD_NOT_FOUND		"%s%s:\tcommand not found: %s.\n%s"
 
 // Utils define
 
@@ -64,29 +64,26 @@
 # define ENVP_PATH					"PATH="
 # define ENVP_PATH_SEPARATOR		':'
 
-// Fd
-
-# define STDERROR					2
-
 // Global variable
 
 // Holds the program name
 extern char	*g_pname;
+extern char	**g_envp;
 
 // Structures
 
+typedef struct s_command
+{
+	char	**argv;
+}	t_command;
+
 typedef struct s_pipex
 {
-	int		fd_infile;
-	int		flags_infile;
-	int		fd_outfile;
-	int		fd_null;
-	int		cmd_count;
-	int		here_doc;
-	char	**envp;
-	char	**paths;
-	char	**argv;
-	char	**commands;
+	int			fd_infile;
+	int			fd_outfile;
+	char		**paths;
+	size_t		cmd_count;
+	t_command	*commands;
 }	t_pipex;
 
 // Functions
@@ -94,6 +91,7 @@ typedef struct s_pipex
 // Error functions
 
 void	print_gen_error(const char *error);
+void	print_cmd_not_found_error(const char *cmd);
 
 // Free functions
 
@@ -102,7 +100,7 @@ void	free_pipex(t_pipex *pipex);
 
 // Path functions
 
-char	**get_paths(char	**envp);
+char	**get_paths(void);
 char	*get_absolute_path(char *command, char **paths);
 
 #endif

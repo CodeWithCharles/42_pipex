@@ -3,28 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_pathing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:45:23 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/28 15:15:39 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:46:42 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "pipex_utils.h"
 
-char	**get_paths(char	**envp)
+char	**get_paths(void)
 {
+	char	*envp;
 	char	*path;
 
-	while (*envp)
+	envp = g_envp;
+	while (envp)
 	{
-		if (ft_strncmp(*envp, ENVP_PATH, sizeof(ENVP_PATH) - 1) != 0)
+		if (ft_strncmp(envp, ENVP_PATH, sizeof(ENVP_PATH) - 1) != 0)
 		{
 			++envp;
 			continue ;
 		}
-		path = (*envp) + sizeof(ENVP_PATH) - 1;
+		path = (envp) + sizeof(ENVP_PATH) - 1;
 		return (ft_split(path, ENVP_PATH_SEPARATOR));
 	}
 	return (NULL);

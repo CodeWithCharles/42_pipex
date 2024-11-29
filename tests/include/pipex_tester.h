@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_tester.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:48:16 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/28 16:23:27 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:50:40 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	print_test_header(char *test_name);
 
 // Pathing tests
 
-int		test_get_paths(char	**envp);
+int		test_get_paths(void);
 int		test_get_absolute_path(void);
 
 #endif
