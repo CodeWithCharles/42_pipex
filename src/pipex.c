@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:51:48 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/29 17:05:51 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 21:18:14 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ int	main(int argc, char **argv, char **envp)
 	int		ret_code;
 
 	(void)ret_code;
-	(void)argc;
+	ret_code = RET_OK;
 	g_pname = argv[0];
 	g_envp = envp;
-	if (parse_input(argc, argv, &pipex) != RET_OK)
+	if (init_pipex(argc, argv, &pipex) != RET_OK)
 		return (EXIT_FAILURE);
-	pipex.paths = get_paths();
+	free_pipex(&pipex);
+	return (RET_OK);
 }

@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:29:31 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/29 18:56:11 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 21:25:07 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define ERROR_MISSING_OPERAND		"%s%s:\tMissing operand.\n%s"
 # define ERROR_MISSING_ARGS			"%s%s:\tNot enough arguments.\n%s"
 # define ERROR_INT					"%s%s:\tInternal error.\n%s"
-# define ERROR_PATH					"%s%s:\tCould not find path in envp.\n%s"
+# define ERROR_PATH					"%s%s:\tCould not find paths in envp.\n%s"
 # define ERROR_HERE_DOC_INT			"%s%s:\tInternal error reading here_doc\n%s"
 # define ERROR_CMD_NOT_FOUND		"%s%s:\tCommand not found: %s.\n%s"
 # define ERROR_NO_SUCH_FILE_INPUT	"%s%s:\tNo such file or directory : %s.\n%s"
@@ -96,10 +96,12 @@ void	print_gen_error(const char *error);
 void	print_cmd_not_found_error(const char *cmd);
 void	print_no_such_file_error(const char *file);
 
-// Free functions
+// Structure handling functions
 
 void	free_double_tab(char	***arr);
 void	free_pipex(t_pipex *pipex);
+void	free_commands(t_pipex *pipex);
+int		init_pipex(int argc, char **argv, t_pipex *pipex);
 
 // Path functions
 
@@ -109,5 +111,10 @@ char	*get_absolute_path(char *command, char **paths);
 // Parsing functions 
 
 int		parse_input(int argc, char **argv, t_pipex *pipex);	
+int		parse_commands(char **argv, t_pipex *pipex);
+
+// Here_doc function
+
+int		read_here_doc(const char *limiter, t_pipex *pipex);
 
 #endif

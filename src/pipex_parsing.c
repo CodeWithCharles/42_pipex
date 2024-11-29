@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:18:47 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/29 19:08:54 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/29 21:22:04 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	parse_input(
 	pipex->cmd_count = argc - (3 + here_doc * 2);
 	if (argc - (3 + here_doc * 2) < 0)
 		return (print_gen_error(ERROR_MISSING_ARGS), RET_ERR);
-	out_flags = O_WRONLY | O_CREATE | O_TRUNC;
+	out_flags = O_WRONLY | O_CREAT | O_TRUNC;
 	if (here_doc)
 	{
 		if (read_here_doc(argv[2], pipex) != RET_OK)
@@ -50,12 +50,13 @@ int	parse_commands(
 	t_pipex *pipex
 )
 {
-	int	curr_cmd;
+	unsigned int	curr_cmd;
 
 	curr_cmd = 0;
-	pipex->commands = malloc(sizeof(t_command) * cmd_count + 1);
+	pipex->commands = malloc(sizeof(t_command) * pipex->cmd_count + 1);
 	if (!pipex->commands)
 		return (free_pipex(pipex), print_gen_error(ERROR_INT), RET_ERR);
-	while (curr_cmd < cmd_count)
-		pipex->commands[curr_cmd] = ft_split(argv[curr_cmd]);
+	while (curr_cmd < pipex->cmd_count)
+		pipex->commands[curr_cmd].argv = ft_split(argv[curr_cmd], ' ');
+	return (RET_OK);
 }

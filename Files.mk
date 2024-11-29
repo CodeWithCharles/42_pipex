@@ -1,2 +1,2 @@
 FILES	=																	\
-	error free pipex pipex_parsing pipex_pathing							\
+	error pipex pipex_here_doc pipex_parsing pipex_pathing pipex_structure	\
