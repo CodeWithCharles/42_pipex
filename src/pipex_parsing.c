@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:18:47 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/29 21:22:04 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:15:44 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ int	parse_commands(
 	if (!pipex->commands)
 		return (free_pipex(pipex), print_gen_error(ERROR_INT), RET_ERR);
 	while (curr_cmd < pipex->cmd_count)
+	{
 		pipex->commands[curr_cmd].argv = ft_split(argv[curr_cmd], ' ');
+		if (!pipex->commands[curr_cmd++].argv)
+			return (free_pipex(pipex), print_gen_error(ERROR_INT), RET_ERR);
+	}
 	return (RET_OK);
 }

@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 18:20:59 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/29 21:26:03 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:30:50 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,25 @@ void	free_pipex(t_pipex *pipex)
 		close(pipex->fd_infile);
 	if (pipex->fd_outfile > 0)
 		close(pipex->fd_outfile);
-	if (pipex->commands)
-		free_commands(pipex);
+	free_commands(pipex);
 }
 
 void	free_commands(t_pipex *pipex)
 {
-	while (pipex->commands)
-		free_double_tab(&(pipex->commands++->argv));
-	free(pipex->commands);
+	size_t	i;
+
+	if (pipex->commands)
+	{
+		i = 0;
+		while (i < pipex->cmd_count)
+		{
+			if (pipex->commands[i].argv)
+				free_double_tab(&(pipex->commands[i].argv));
+			i++;
+		}
+		free(pipex->commands);
+		pipex->commands = NULL;
+	}
 }
 
 void	free_double_tab(char	***arr)
