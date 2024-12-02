@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 13:04:22 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/02 15:19:40 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:33:57 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ int	do_command_pipe(t_pipex *pipex, int cmd_idx)
 	if (!cmd_pid)
 	{
 		close(p_fd[0]);
-		dup2(p_fd[1], STDOUT_FILENO);
+		if (pipex->cmd_count == (unsigned int)cmd_idx + 1)
+			(close(p_fd[1]), dup2(pipex->fd_outfile, STDOUT_FILENO));
+		else
+			dup2(p_fd[1], STDOUT_FILENO);
 		execute_command(pipex, cmd_idx);
 	}
 	else
