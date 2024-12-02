@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/11/29 18:27:23 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/12/02 12:41:06 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -170,5 +170,5 @@ $(LIBFT_TARGET):
 	fi
 	@printf "$(TERM_MAGENTA)Making archive $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
 	@$(MAKE) -C $(LIBFT_PATH)
-	@mv $(LIBFT_PATH)/$(LIBFT_TARGET) ./ 
+	@cp $(LIBFT_PATH)/$(LIBFT_TARGET) ./ 
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done copying archive $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@

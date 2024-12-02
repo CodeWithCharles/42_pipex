@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:49:17 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/02 12:00:20 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/02 12:43:01 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,17 @@ int	read_here_doc(
 )
 {
 	char	*line;
-	int		fd;
 
 	pipex->fd_infile = open(HERE_DOC_TMP_PATH,
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex->fd_infile < 0)
 		return (print_gen_error(ERROR_HERE_DOC_OPEN_TMP), RET_ERR);
-	ft_pustr_fd(HERE_DOC_PREFIX, STDIN_FILENO);
+	ft_putstr_fd(HERE_DOC_PREFIX, STDIN_FILENO);
 	line = get_next_line(STDIN_FILENO);
 	while (line && ft_strncmp(line, limiter, ft_strlen(limiter) - 1))
 	{
-		ft_pustr_fd(line, pipex->fd_infile);
-		(ft_pustr_fd(HERE_DOC_PREFIX, STDIN_FILENO), free(line));
+		ft_putstr_fd(line, pipex->fd_infile);
+		(ft_putstr_fd(HERE_DOC_PREFIX, STDIN_FILENO), free(line));
 		line = get_next_line(STDIN_FILENO);
 	}
 	(free(line), close(pipex->fd_infile));

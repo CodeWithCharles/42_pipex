@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:18:47 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/30 16:15:44 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/02 12:43:52 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	parse_commands(
 	unsigned int	curr_cmd;
 
 	curr_cmd = 0;
-	pipex->commands = malloc(sizeof(t_command) * pipex->cmd_count + 1);
+	pipex->commands = malloc(sizeof(t_command) * pipex->cmd_count);
 	if (!pipex->commands)
 		return (free_pipex(pipex), print_gen_error(ERROR_INT), RET_ERR);
 	while (curr_cmd < pipex->cmd_count)
