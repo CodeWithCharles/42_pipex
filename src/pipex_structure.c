@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 18:20:59 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/30 16:30:50 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/02 17:55:23 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,13 @@ void	free_pipex(t_pipex *pipex)
 {
 	if (pipex->paths)
 		free_double_tab(&(pipex->paths));
-	if (pipex->fd_infile > 0)
+	if (pipex->fd_infile >= 0)
 		close(pipex->fd_infile);
-	if (pipex->fd_outfile > 0)
+	if (pipex->fd_outfile >= 0)
 		close(pipex->fd_outfile);
 	free_commands(pipex);
+	if (pipex->here_doc)
+		unlink(HERE_DOC_TMP_PATH);
 }
 
 void	free_commands(t_pipex *pipex)

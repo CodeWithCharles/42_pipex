@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:29:31 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/02 14:25:23 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/02 17:46:14 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <sys/wait.h>
 
 // Terminal colors
 
@@ -53,6 +54,8 @@
 # define ERROR_NO_SUCH_FILE_INPUT	"%s%s:\tNo such file or directory : %s.\n%s"
 # define ERROR_INT_PIPE				"%s%s:\tInternal error creating pipe.\n%s"
 # define ERROR_INT_FORK				"%s%s:\tInternal error on fork.\n%s"
+# define ERROR_CHILD_EXECUTION		"%s%s:\tChild process execution error.\n%s"
+# define ERROR_CHILD_WAIT			"%s%s:\tError while waiting for child.\n%s"
 
 // Utils define
 
@@ -60,6 +63,8 @@
 
 # define RET_OK						0
 # define RET_ERR					1
+# define RET_CMD_NOT_FOUND			127
+# define RET_EXECUTION_ERROR		126
 
 # define PIPE_READ					0
 # define PIPE_WRITE					1
@@ -123,6 +128,7 @@ int		read_here_doc(const char *limiter, t_pipex *pipex);
 // Execution
 
 int		do_command_pipe(t_pipex *pipex, int cmd_idx);
-void	execute_command(t_pipex *pipex, int cmd_idx);
+void	execute_command(t_pipex *pipex, int cmd_idx, int p_fd[2]);
+int		handle_child_status(int child_status, char *cmd_name);
 
 #endif
