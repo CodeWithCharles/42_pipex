@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:29:31 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/02 17:46:14 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:29:16 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ typedef struct s_pipex
 	char		**paths;
 	size_t		cmd_count;
 	t_command	*commands;
+	int			*pid_list;
 }	t_pipex;
 
 // Functions
@@ -130,5 +131,6 @@ int		read_here_doc(const char *limiter, t_pipex *pipex);
 int		do_command_pipe(t_pipex *pipex, int cmd_idx);
 void	execute_command(t_pipex *pipex, int cmd_idx, int p_fd[2]);
 int		handle_child_status(int child_status, char *cmd_name);
+int		execute_commands(t_pipex *pipex);
 
 #endif

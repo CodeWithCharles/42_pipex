@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:51:48 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/02 15:33:07 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:52:13 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex			pipex;
 	int				ret_code;
-	unsigned int	i;
 
 	ret_code = RET_OK;
 	g_pname = argv[0];
@@ -27,13 +26,8 @@ int	main(int argc, char **argv, char **envp)
 	if (init_pipex(argc, argv, &pipex) != RET_OK)
 		return (EXIT_FAILURE);
 	dup2(pipex.fd_infile, STDIN_FILENO);
-	i = 0;
-	while (i < pipex.cmd_count)
-	{
-		if (do_command_pipe(&pipex, i) != RET_OK)
-			ret_code = RET_ERR;
-		i++;
-	}
+	if (pipex.cmd_count)
+		execute_commands(&pipex);
 	free_pipex(&pipex);
 	return (ret_code);
 }
