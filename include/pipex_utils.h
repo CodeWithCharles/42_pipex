@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:29:31 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/02 11:52:54 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:25:23 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@
 # define ERROR_HERE_DOC_OPEN_TMP	"%s%s:\tError opening here_doc tmp fd\n%s"
 # define ERROR_CMD_NOT_FOUND		"%s%s:\tCommand not found: %s.\n%s"
 # define ERROR_NO_SUCH_FILE_INPUT	"%s%s:\tNo such file or directory : %s.\n%s"
+# define ERROR_INT_PIPE				"%s%s:\tInternal error creating pipe.\n%s"
+# define ERROR_INT_FORK				"%s%s:\tInternal error on fork.\n%s"
 
 // Utils define
 
@@ -117,5 +119,10 @@ int		parse_commands(char **argv, t_pipex *pipex);
 // Here_doc function
 
 int		read_here_doc(const char *limiter, t_pipex *pipex);
+
+// Execution
+
+int		do_command_pipe(t_pipex *pipex, int cmd_idx);
+void	execute_command(t_pipex *pipex, int cmd_idx);
 
 #endif
