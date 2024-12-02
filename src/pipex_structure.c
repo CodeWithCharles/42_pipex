@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 18:20:59 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/02 17:55:23 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:22:14 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ void	free_pipex(t_pipex *pipex)
 	if (pipex->fd_outfile >= 0)
 		close(pipex->fd_outfile);
 	free_commands(pipex);
-	if (pipex->here_doc)
-		unlink(HERE_DOC_TMP_PATH);
+	unlink(HERE_DOC_TMP_PATH);
 }
 
 void	free_commands(t_pipex *pipex)
