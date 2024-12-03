@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 13:04:22 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/03 17:44:33 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:46:46 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	handle_child_status(int child_status, char *cmd_name)
 	if (child_status == 127)
 		return (print_cmd_not_found_error(cmd_name), RET_ERR);
 	else if (child_status != 0
-			&& (child_status != 1 && ft_strncmp(cmd_name, "grep", 4)))
+		&& (child_status != 1 && ft_strncmp(cmd_name, "grep", 4)))
 		return (print_gen_error(ERROR_CHILD_EXECUTION), RET_ERR);
 	return (RET_OK);
 }
