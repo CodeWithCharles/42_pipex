@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/12/02 12:41:06 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/12/03 17:36:46 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -98,6 +98,10 @@ fclean: clean
 	@if [ -e $(INC_DIR)/$(LIBFT_INC_H) ]; then \
 		printf "$(TERM_YELLOW)Removing \"%s\"...\n$(TERM_RESET)" $(INC_DIR)/$(LIBFT_INC_H); \
 		$(RM) $(INC_DIR)/$(LIBFT_INC_H);\
+	fi
+	@if [ -e $(LIBFT_TARGET) ]; then \
+		printf "$(TERM_YELLOW)Removing \"%s\"...\n$(TERM_RESET)" $(LIBFT_TARGET); \
+		$(RM) $(LIBFT_TARGET);\
 	fi
 
 cleanlibs:
