@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:18:47 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/03 15:12:31 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:30:29 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,8 @@ int	parse_input(
 	}
 	else
 		pipex->fd_infile = open(argv[1], O_RDONLY);
-	if (pipex->fd_infile < 0)
-		return (print_no_such_file_error(argv[1]), RET_ERR);
-	pipex->fd_outfile = open (argv[argc - 1], out_flags, 0666);
-	if (pipex->fd_outfile < 0)
-		return (print_gen_error(ERROR_OPEN_OUT), RET_ERR);
+	if (handle_in_out_fd(argc, argv, pipex, out_flags) != RET_OK)
+		return (RET_ERR);
 	return (parse_commands(argv + 2 + here_doc * 2, pipex));
 }
 
@@ -62,5 +59,30 @@ int	parse_commands(
 		if (!pipex->commands[curr_cmd++].argv)
 			return (free_pipex(pipex), print_gen_error(ERROR_INT), RET_ERR);
 	}
+	return (RET_OK);
+}
+
+int	handle_in_out_fd(
+	int argc,
+	char **argv,
+	t_pipex *pipex,
+	int out_flags
+)
+{
+	if (pipex->fd_infile < 0)
+		(print_no_such_file_error(argv[1]), redirect_in_to_empty(pipex));
+	if (pipex->fd_infile < 0)
+		return (RET_ERR);
+	pipex->fd_outfile = open (argv[argc - 1], out_flags, 0666);
+	if (pipex->fd_outfile < 0)
+		return (print_gen_error(ERROR_OPEN_OUT), RET_ERR);
+	return (RET_OK);
+}
+
+int	redirect_in_to_empty(t_pipex *pipex)
+{
+	pipex->fd_infile = open(TMP_EMPTY_PATH, O_RDWR | O_CREAT | O_TRUNC, 0666);
+	if (pipex->fd_infile < 0)
+		return (print_gen_error(ERROR_OPEN_TMP_EMPTY), RET_ERR);
 	return (RET_OK);
 }

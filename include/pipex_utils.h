@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:29:31 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/03 15:12:09 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:29:09 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@
 # define ERROR_CHILD_EXECUTION		"%s%s:\tChild process execution error.\n%s"
 # define ERROR_CHILD_WAIT			"%s%s:\tError while waiting for child.\n%s"
 # define ERROR_OPEN_OUT				"%s%s:\tError opening out, check perms.\n%s"
+# define ERROR_OPEN_TMP_EMPTY		"%s%s:\tCould'nt open /tmp/pipex_empty.\n%s"
+
 // Utils define
 
 # define BUFFER_SIZE				4096
@@ -73,6 +75,7 @@
 
 # define ENVP_PATH					"PATH="
 # define ENVP_PATH_SEPARATOR		':'
+# define TMP_EMPTY_PATH				"/tmp/pipex_empty"
 
 // Global variable
 
@@ -111,6 +114,11 @@ void	free_double_tab(char	***arr);
 void	free_pipex(t_pipex *pipex);
 void	free_commands(t_pipex *pipex);
 int		init_pipex(int argc, char **argv, t_pipex *pipex);
+
+// Fd handling functions 
+
+int		handle_in_out_fd(int argc, char **argv, t_pipex *pipex, int out_flags);
+int		redirect_in_to_empty(t_pipex *pipex);
 
 // Path functions
 
