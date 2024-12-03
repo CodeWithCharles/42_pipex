@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:29:31 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/02 21:29:16 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:12:09 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@
 # define ERROR_INT_FORK				"%s%s:\tInternal error on fork.\n%s"
 # define ERROR_CHILD_EXECUTION		"%s%s:\tChild process execution error.\n%s"
 # define ERROR_CHILD_WAIT			"%s%s:\tError while waiting for child.\n%s"
-
+# define ERROR_OPEN_OUT				"%s%s:\tError opening out, check perms.\n%s"
 // Utils define
 
 # define BUFFER_SIZE				4096
