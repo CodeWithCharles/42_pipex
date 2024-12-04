@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/12/04 15:20:26 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/12/04 15:22:22 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,7 @@ fclean: clean
 	fi
 	@if [ -e $(INC_DIR)/$(LIBFT_INC_H) ]; then \
 		printf "$(TERM_YELLOW)Removing \"%s\"...\n$(TERM_RESET)" $(INC_DIR)/$(LIBFT_INC_H); \
-		$(RM) $(INC_DIR)/$(LIBFT_INC_H);\
+		$(RM) $(THDPTY_LIBFT_H);\
 	fi
 	@if [ -e $(LIBFT_TARGET) ]; then \
 		printf "$(TERM_YELLOW)Removing \"%s\"...\n$(TERM_RESET)" $(LIBFT_TARGET); \
@@ -106,7 +106,7 @@ tests: $(TEST_TARGET)
 fcleanlibs:
 	@$(MAKE) fclean -C $(LIBFT_PATH)
 	@$(RM) $(LIBFT_TARGET)
-	@$(RM) $(INC_DIR)/$(LIBFT_INC_H)
+	@$(RM) $(THDPTY_LIBFT_H)
 
 re: fclean all
 
