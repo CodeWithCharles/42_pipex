@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 13:04:22 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/03 17:46:46 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/04 12:04:45 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	execute_command(t_pipex *pipex, int cmd_idx, int p_fd[2])
 			pipex->paths
 			);
 	if (cmd_path == NULL)
-		_exit(127);
+		(free_pipex(pipex), _exit(127));
 	execve(cmd_path, pipex->commands[cmd_idx].argv, g_envp);
 }
 
