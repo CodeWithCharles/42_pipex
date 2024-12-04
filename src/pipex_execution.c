@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 13:04:22 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/04 13:57:28 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:03:34 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ void	execute_command(t_pipex *pipex, int cmd_idx, int p_fd[2])
 			);
 	if (cmd_path == NULL)
 		(free_pipex(pipex), _exit(127));
-	execve(cmd_path, pipex->commands[cmd_idx].argv, g_envp);
+	if (execve(cmd_path, pipex->commands[cmd_idx].argv, g_envp) == -1)
+		(free_pipex(pipex), _exit(126));
 }
 
 int	handle_child_status(int child_status, char *cmd_name)

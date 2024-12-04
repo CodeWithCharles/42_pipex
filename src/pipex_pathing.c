@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:45:23 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/11/29 17:21:32 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:21:38 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ char	*get_absolute_path(char *command, char **paths)
 	size_t	command_size;
 	size_t	path_size;
 
+	if (ft_strncmp(command, "./", 2) == 0)
+		return (handle_relative_command(command));
 	command_size = ft_strlen(command);
 	while (*paths)
 	{
@@ -49,10 +51,17 @@ char	*get_absolute_path(char *command, char **paths)
 		ft_memcpy(res + path_size + 1, command, command_size);
 		res[path_size] = '/';
 		res[command_size + path_size + 1] = '\0';
-		if (access(res, F_OK) == 0)
+		if (access(res, F_OK | X_OK) == 0)
 			return (res);
 		free(res);
 		++paths;
 	}
+	return (NULL);
+}
+
+char	*handle_relative_command(char *command)
+{
+	if (access(command, F_OK | X_OK) == 0)
+		return (command);
 	return (NULL);
 }

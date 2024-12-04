@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:29:31 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/03 17:29:09 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:06:36 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	free_pipex(t_pipex *pipex);
 void	free_commands(t_pipex *pipex);
 int		init_pipex(int argc, char **argv, t_pipex *pipex);
 
-// Fd handling functions 
+// Fd handling functions
 
 int		handle_in_out_fd(int argc, char **argv, t_pipex *pipex, int out_flags);
 int		redirect_in_to_empty(t_pipex *pipex);
@@ -124,10 +124,11 @@ int		redirect_in_to_empty(t_pipex *pipex);
 
 char	**get_paths(void);
 char	*get_absolute_path(char *command, char **paths);
+char	*handle_relative_command(char *command);
 
-// Parsing functions 
+// Parsing functions
 
-int		parse_input(int argc, char **argv, t_pipex *pipex);	
+int		parse_input(int argc, char **argv, t_pipex *pipex);
 int		parse_commands(char **argv, t_pipex *pipex);
 
 // Here_doc function
