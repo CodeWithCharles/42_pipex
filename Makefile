@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/12/04 14:49:44 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/12/04 15:20:26 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,15 +18,12 @@ ECHO			=	/usr/bin/echo
 # Includes
 
 include			Files.mk
-include			Files_Test.mk
 
 # Directories
 
 SRC_DIR			:=	src
 INC_DIR			:=	include
 OBJ_DIR			:=	build
-TEST_DIR		:=	tests
-TEST_INC		:=	tests/include
 
 # Third party
 
@@ -40,7 +37,6 @@ LIBFT_GIT		:=	https://github.com/CodeWithCharles/42_libft_full.git
 # Targets
 
 TARGET			:=	pipex
-TEST_TARGET		:=	pipex_tester
 THDPTY_LIBFT_H	:=	$(INC_DIR)/$(LIBFT_INC_H)
 
 # Compiler
@@ -56,7 +52,6 @@ CORE_FILES		:=	$(filter-out $(MAIN_FILE), $(FILES))
 # Objs formatter
 
 CORE_OBJS		=	$(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(CORE_FILES)))
-TEST_OBJS		=	$(addprefix $(OBJ_DIR)/$(TEST_DIR)/, $(addsuffix .o, $(TEST_FILES)))
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(FILES)))
 
 # Terminal colors
@@ -94,10 +89,6 @@ fclean: clean
 		$(RM) $(TARGET);\
 		$(RM) libft.h;\
 	fi
-	@if [ -e $(TEST_TARGET) ]; then \
-		printf "$(TERM_YELLOW)Removing \"%s\"...\n$(TERM_RESET)" $(TEST_TARGET); \
-		$(RM) $(TEST_TARGET);\
-	fi
 	@if [ -e $(INC_DIR)/$(LIBFT_INC_H) ]; then \
 		printf "$(TERM_YELLOW)Removing \"%s\"...\n$(TERM_RESET)" $(INC_DIR)/$(LIBFT_INC_H); \
 		$(RM) $(INC_DIR)/$(LIBFT_INC_H);\
@@ -133,9 +124,6 @@ _obj_header:
 _obj_footer:
 	@printf "$(TERM_UP)$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building $(TERM_BLUE)%d$(TERM_GREEN) object(s) !\n$(TERM_RESET)" $(words $(OBJS))
 
-_obj_test_footer:
-	@printf "$(TERM_UP)$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building $(TERM_BLUE)%d$(TERM_GREEN) object(s) !\n$(TERM_RESET)" $(words $(TEST_OBJS))
-
 # Binary / Lib generation
 
 $(TARGET): $(THDPTY_LIBFT_H) $(OBJS)
@@ -145,25 +133,14 @@ $(TARGET): $(THDPTY_LIBFT_H) $(OBJS)
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
 	@$(RM) $(OBJ_HEADER_FLAG)
 
-$(TEST_TARGET): $(LIBFT_INC_H) _header _obj_header $(CORE_OBJS) _obj_footer $(TEST_OBJS) _obj_test_footer
-	@printf "$(TERM_YELLOW)Making executable $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
-	@$(CC) $(CORE_OBJS) $(TEST_OBJS) $(LIBFT_TARGET) -I$(INC_DIR) -I$(TEST_INC) -o $@ $(CFLAGS)
-	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
-
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@if [ ! -f $(OBJ_HEADER_FLAG) ]; then \
-		@$(MAKE) _obj_header; \
+		$(MAKE) _obj_header; \
 		touch $(OBJ_HEADER_FLAG); \
 	fi
 	@printf "$(TERM_CLEAR_LINE)$(TERM_MAGENTA)Compiling $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...\n$(TERM_RESET)" $@
 	@mkdir -p $(@D)
 	@$(CC) -c $< -o $@ -I$(INC_DIR) $(CFLAGS)
-	@printf "$(TERM_UP)"
-
-$(OBJ_DIR)/$(TEST_DIR)/%.o: $(TEST_DIR)/$(SRC_DIR)/%.c
-	@printf "$(TERM_CLEAR_LINE)$(TERM_YELLOW)Compiling $(TERM_BLUE)\"%s\"$(TERM_YELLOW)...\n$(TERM_RESET)" $@
-	@mkdir -p $(@D)
-	@$(CC) -c $< -o $@ -I$(TEST_INC) -I$(INC_DIR) $(CFLAGS)
 	@printf "$(TERM_UP)"
 
 # Third party compilation
