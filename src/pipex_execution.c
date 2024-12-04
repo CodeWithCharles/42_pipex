@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 13:04:22 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/04 12:04:45 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:57:28 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@ void	execute_command(t_pipex *pipex, int cmd_idx, int p_fd[2])
 
 	close(p_fd[0]);
 	if (pipex->cmd_count == (unsigned int)cmd_idx + 1)
-		(close(p_fd[1]), dup2(pipex->fd_outfile, STDOUT_FILENO));
+		(close(p_fd[1]), dup2(pipex->fd_outfile, STDOUT_FILENO), close(pipex->fd_outfile));
 	else
 		(dup2(p_fd[1], STDOUT_FILENO), close(p_fd[1]));
+	close(pipex->fd_infile);
 	cmd_path = get_absolute_path(
 			pipex->commands[cmd_idx].argv[0],
 			pipex->paths
