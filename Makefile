@@ -6,7 +6,7 @@
 #    By: cpoulain <cpoulain@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 16:33:26 by cpoulain          #+#    #+#              #
-#    Updated: 2024/12/03 17:36:46 by cpoulain         ###   ########.fr        #
+#    Updated: 2024/12/04 14:49:44 by cpoulain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ LIBFT_GIT		:=	https://github.com/CodeWithCharles/42_libft_full.git
 
 TARGET			:=	pipex
 TEST_TARGET		:=	pipex_tester
+THDPTY_LIBFT_H	:=	$(INC_DIR)/$(LIBFT_INC_H)
 
 # Compiler
 
@@ -73,9 +74,11 @@ TERM_WHITE		:=	\033[37m
 TERM_UP			:=	\033[1A
 TERM_CLEAR_LINE	:=	\033[2K\r
 
-# Phony rules
+# Flags
 
-.PHONY: all clean fclean re norminette _header _obj_footer _obj_header cleanlibs fcleanlibs tests _obj_test_footer
+OBJ_HEADER_FLAG	:=	.obj_header_done
+
+# Phony rules
 
 all: $(TARGET)
 
@@ -135,10 +138,12 @@ _obj_test_footer:
 
 # Binary / Lib generation
 
-$(TARGET): $(LIBFT_INC_H) _header _obj_header $(OBJS) _obj_footer 
+$(TARGET): $(THDPTY_LIBFT_H) $(OBJS)
+	@$(MAKE) _obj_footer
 	@printf "$(TERM_MAGENTA)Making executable $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
 	@$(CC) $(OBJS) -I$(INC_DIR) $(LIBFT_TARGET) -o $@ $(CFLAGS)
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
+	@$(RM) $(OBJ_HEADER_FLAG)
 
 $(TEST_TARGET): $(LIBFT_INC_H) _header _obj_header $(CORE_OBJS) _obj_footer $(TEST_OBJS) _obj_test_footer
 	@printf "$(TERM_YELLOW)Making executable $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...$(TERM_RESET)" $@
@@ -146,6 +151,10 @@ $(TEST_TARGET): $(LIBFT_INC_H) _header _obj_header $(CORE_OBJS) _obj_footer $(TE
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done building executable $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@if [ ! -f $(OBJ_HEADER_FLAG) ]; then \
+		@$(MAKE) _obj_header; \
+		touch $(OBJ_HEADER_FLAG); \
+	fi
 	@printf "$(TERM_CLEAR_LINE)$(TERM_MAGENTA)Compiling $(TERM_BLUE)\"%s\"$(TERM_MAGENTA)...\n$(TERM_RESET)" $@
 	@mkdir -p $(@D)
 	@$(CC) -c $< -o $@ -I$(INC_DIR) $(CFLAGS)
@@ -159,13 +168,8 @@ $(OBJ_DIR)/$(TEST_DIR)/%.o: $(TEST_DIR)/$(SRC_DIR)/%.c
 
 # Third party compilation
 
-$(LIBFT_INC_H): $(LIBFT_TARGET)
-	@cmp -s $(LIBFT_PATH)/$@ $(INC_DIR)/$@; \
-	DIFF=$$?; \
-	if [ $$DIFF -ne 0 ]; then \
-		printf "$(TERM_MAGENTA)Copying .h file from \"%s\" in \"%s\"...\n$(TERM_RESET)" $(LIBFT_PATH)/$@ $(INC_DIR); \
-		cp $(LIBFT_PATH)/$@ $(INC_DIR); \
-	fi	
+$(THDPTY_LIBFT_H): $(LIBFT_TARGET)
+	@cp -u $(LIBFT_PATH)/$(LIBFT_INC_H) $@
 
 $(LIBFT_TARGET):
 	@if [ ! -d "$(LIBFT_PATH)/.git" ]; then \
@@ -176,3 +180,5 @@ $(LIBFT_TARGET):
 	@$(MAKE) -C $(LIBFT_PATH)
 	@cp $(LIBFT_PATH)/$(LIBFT_TARGET) ./ 
 	@printf "$(TERM_CLEAR_LINE)$(TERM_GREEN)Done copying archive $(TERM_BLUE)\"%s\"$(TERM_GREEN) !\n$(TERM_RESET)" $@
+
+.PHONY: all clean fclean re norminette _header _obj_footer _obj_header cleanlibs fcleanlibs tests _obj_test_footer
