@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:18:47 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/04 15:48:09 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:49:43 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	parse_input(
 		pipex->fd_infile = open(argv[1], O_RDONLY);
 	if (handle_in_out_fd(argc, argv, pipex, out_flags) != RET_OK)
 		return (RET_ERR);
-	return (parse_commands(argv + 2 + here_doc * 2, pipex));
+	return (parse_commands(argv + 2 + here_doc, pipex));
 }
 
 int	parse_commands(
