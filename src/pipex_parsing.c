@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:18:47 by cpoulain          #+#    #+#             */
-/*   Updated: 2024/12/03 17:39:36 by cpoulain         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:48:09 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	parse_input(
 	if (argc < 2)
 		return (print_gen_error(ERROR_MISSING_ARGS), RET_ERR);
 	here_doc = ft_strcmp(argv[1], HERE_DOC) == 0;
-	pipex->cmd_count = argc - (3 + here_doc * 2);
+	pipex->cmd_count = argc - (3 + here_doc);
 	if (argc - (3 + here_doc * 2) < 0)
 		return (print_gen_error(ERROR_MISSING_ARGS), RET_ERR);
 	out_flags = O_WRONLY | O_CREAT | O_TRUNC;
